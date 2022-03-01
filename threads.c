@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 19:43:34 by mbesan            #+#    #+#             */
-/*   Updated: 2022/02/28 21:10:39 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/01 23:37:22 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,46 @@ static void	*viewer(void *data)
 	return ((void*)0);
 }
 
-static void	*philo(void *philo)
+static void	*philo(void *phil)
 {
 	t_ph *phr;
 
-	phr = philo;
+	printf("?\n");
+	phr = phil;
+	printf("s-time = %lld\n", phr->data->s_time);
+	printf("s-time = %lld\n", phr->data->s_time);
 	phr->last_meal = my_get_time();
-	if (phr->num % 2 == 0 && phr->status == INIT)
+	printf("s-time = %lld\n", phr->data->s_time);
+	printf("da\n");
+	printf("s-time = %lld\n", phr->data->s_time);
+	/*if (phr->num % 2 == 0 && phr->status == INIT && phr->data->num > 1)
 	{
 		phr->status = THINKING;
-		//notification(phr, THINKING);
+		notification(phr, THINKING);
 		usleep(12000);
-	}
+	}*/
+	printf("s-time = %lld\n", phr->data->s_time);
+	printf("ds = %d \n", phr->data->status);
 	while (phr->data->status != DEAD)
 	{
 		phr->status = WAITING;
+		printf("s-time = %lld\n", phr->data->s_time);
+
+		ft_putnbr(phr->data->s_time * 1000);
+		write(1, "=1time\n",7);
 		get_forks(phr);
+		//ft_putnbr(phr->data->s_time * 1000);
+		//write(1, "=2time\n",7);
 		eating(phr);
+		ft_putnbr(phr->data->s_time * 1000);
+		write(1, "=3time\n",7);
 		put_forks(phr);
+		ft_putnbr(phr->data->s_time * 1000);
+		write(1, "=4time\n",7);
 		phr->status = SLEEPING;
 		notification(phr, SLEEPING);
+		ft_putnbr(phr->data->s_time * 1000);
+		write(1, "=5time\n",7);
 		usleep(phr->data->s_time * 1000);
 		phr->status = THINKING;
 		notification(phr, THINKING);
@@ -86,8 +106,10 @@ void	start(t_data *data)
 	//pthread_detach(monitor);
 	while (a < data->num)
 	{
+		printf("a\n");
 		pthread_create(&data->phs[a].thr, NULL, &philo, (void *)
 		&data->phs[a]);
+		printf("b\n");
 		pthread_detach(data->phs[a].thr);
 		a++;
 	}

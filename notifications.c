@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 21:46:18 by mbesan            #+#    #+#             */
-/*   Updated: 2022/02/28 20:33:37 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/01 16:02:56 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*msg(int flag)
 
 void	notification(t_ph *phr, int flag)
 {
+	//usleep(150000);
 	pthread_mutex_lock(&phr->data->stdout);
 	if (phr->data->status == DEAD)
 	{
@@ -51,5 +52,6 @@ void	notification(t_ph *phr, int flag)
 		write(1, msg(flag), ft_strlen(msg(flag)));
 	}
 	pthread_mutex_unlock(&phr->data->stdout);
+	//usleep(150000);
 	//pthread_mutex_unlock(&phr->data->death);
 }

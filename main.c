@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:17:26 by mbesan            #+#    #+#             */
-/*   Updated: 2022/02/28 01:03:23 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/02 02:22:21 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	not_validated(int argc, char **argv)
 		}
 		a++;
 	}
-	if (ft_atoi(argv[1]) < 2 || ft_atoi(argv[2]) < 0 || ft_atoi(argv[3])
+	if (ft_atoi(argv[1]) < 1 || ft_atoi(argv[2]) < 0 || ft_atoi(argv[3])
 		< 0 || ft_atoi(argv[4]) < 0)
 		return (1);
 	if (argv[5] && ft_atoi(argv[5]) <= 0)
@@ -43,13 +43,18 @@ static int	not_validated(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_data	*data;
+	t_data	ata;
 
 	if (argc < 5 || argc > 6)
 		ft_error(WRONG_ARG_N, "Wrong arguments number.\n");
 	if (not_validated(argc, argv))
 		ft_error(SHT_ARGS, "Wrong arguments.\n");
-	init_data(argc, argv, &data, ft_atoi(argv[1]));
-	start(&data);
+	data = (t_data *)malloc(sizeof(t_data));
+	if (data == NULL)
+		ft_error(NO_MEMORY, "Not enough memory\n");
+	data = &ata;
+	init_data(argc, argv, data, ft_atoi(argv[1]));
+	start(data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:20:54 by mbesan            #+#    #+#             */
-/*   Updated: 2022/02/28 21:38:11 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/01 20:07:13 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include <limits.h>
+#include <stdio.h>//////////////////////////////////////////
 
 enum	e_ex
 {
@@ -48,8 +49,8 @@ struct s_data;
 typedef struct s_ph
 {
 	int				num;
-	int				l_fork;
-	int				r_fork;
+	long long		l_fork;
+	long long		r_fork;
 	//mutex			stdout;
 	int				status;
 	long long		last_meal;
