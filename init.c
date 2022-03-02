@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 18:16:16 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/02 02:28:06 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/02 22:30:45 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ static void	init_ms(t_data *data)
 	int	a;
 
 	a = 0;
-	printf("a = %d\n", a);
-	if (pthread_mutex_init(&(data->stdout), NULL) || pthread_mutex_init
-		(&(data->death), NULL))
+	//printf("a = %d\n", a);
+	if (pthread_mutex_init(&data->stdout, NULL) || pthread_mutex_init
+		(&data->death, NULL))
 	{
 		destroy_other(data);
 		ft_error(NO_MEMORY, "Not enough memory\n");
 	}
-	data->forks = (mutex *)malloc(sizeof(mutex) * data->num);
+	data->forks = (mutex *)malloc(sizeof(*(data->forks)) * data->num);
 	if (data->forks == NULL)
 	{
 		destroy_other(data);
@@ -33,7 +33,7 @@ static void	init_ms(t_data *data)
 	//printf("gghere\n");
 	while (a < data->num)
 	{
-		printf("a = %d\n", a);
+		//printf("a = %d\n", a);
 		if (pthread_mutex_init(&(data->forks[a++]), NULL))
 		{
 			destroy_other(data);
@@ -47,7 +47,7 @@ static void	init_philo(t_data *data)
 {
 	int	a;
 
-	data->phs = (t_ph *)malloc(sizeof(t_ph) * data->num);
+	data->phs = (t_ph *)malloc(sizeof(*(data->phs)) * data->num);
 	if (data->phs == NULL)
 	{
 		destroy_other(data);
@@ -61,7 +61,7 @@ static void	init_philo(t_data *data)
 		//printf("here\n");
 		data->phs[a].status = INIT;
 		//printf("here\n");
-		data->phs[a].last_meal = 0;
+		data->phs[a].last_meal = my_get_time();
 		//printf("here\n");
 		data->phs[a].r_fork = a;
 		//printf("here\n");
@@ -70,6 +70,7 @@ static void	init_philo(t_data *data)
 		data->phs[a].e_num = 0;
 		//printf("here\n");
 		data->phs[a++].data = data;
+		printf("%lli\n", data->phs[a - 1].data->s_time);
 		//pthread_mutex_init(&data->phs[a].stdout, NULL);
 	}
 	//printf("%lli\n", data->phs[1].data->s_time);
@@ -87,10 +88,12 @@ void init_data(int argc, char **argv, t_data *data, int num)
 		data->e_num = -1;
 	data->status = INIT;
 	init_philo(data);
-	/*printf("lol\n");
-	printf("%lli\n", data->phs[1].data->s_time);
-	ft_putnbr(data->phs[1].data->s_time * 1000);
+	printf("lol\n");
+	printf("2%lli\n", data->phs[0].data->s_time);
+	/*ft_putnbr(data->phs[1].data->s_time * 1000);
 	printf("lol\n");
 	write(1, "=stime\n",7);*/
 	init_ms(data);
+	printf("3 %lli\n", data->phs[0].data->s_time);
+
 }

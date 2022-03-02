@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:17:26 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/02 02:22:21 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/02 22:32:41 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	main(int argc, char **argv)
 		ft_error(NO_MEMORY, "Not enough memory\n");
 	data = &ata;
 	init_data(argc, argv, data, ft_atoi(argv[1]));
+	printf("4 %lli\n", data->phs[0].data->s_time);
+
 	start(data);
 	return (0);
 }

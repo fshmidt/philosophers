@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 19:43:34 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/01 23:37:22 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/02 22:34:32 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,15 @@ static void	*philo(void *phil)
 {
 	t_ph *phr;
 
-	printf("?\n");
+	//printf("?\n");
 	phr = phil;
+	//printf("s-time = %lld\n", phr->data->s_time);
+	//printf("s-time = %lld\n", phr->data->s_time);
 	printf("s-time = %lld\n", phr->data->s_time);
 	printf("s-time = %lld\n", phr->data->s_time);
-	phr->last_meal = my_get_time();
 	printf("s-time = %lld\n", phr->data->s_time);
 	printf("da\n");
+	printf("s-time = %lld\n", phr->data->s_time);
 	printf("s-time = %lld\n", phr->data->s_time);
 	/*if (phr->num % 2 == 0 && phr->status == INIT && phr->data->num > 1)
 	{
@@ -74,10 +76,10 @@ static void	*philo(void *phil)
 
 		ft_putnbr(phr->data->s_time * 1000);
 		write(1, "=1time\n",7);
-		get_forks(phr);
+		if (got_forks(phr))
 		//ft_putnbr(phr->data->s_time * 1000);
 		//write(1, "=2time\n",7);
-		eating(phr);
+			eating(phr);
 		ft_putnbr(phr->data->s_time * 1000);
 		write(1, "=3time\n",7);
 		put_forks(phr);
@@ -106,10 +108,10 @@ void	start(t_data *data)
 	//pthread_detach(monitor);
 	while (a < data->num)
 	{
-		printf("a\n");
+		//printf("a\n");
 		pthread_create(&data->phs[a].thr, NULL, &philo, (void *)
 		&data->phs[a]);
-		printf("b\n");
+		//printf("b\n");
 		pthread_detach(data->phs[a].thr);
 		a++;
 	}

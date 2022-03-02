@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:20:54 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/01 20:07:13 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/02 18:02:24 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_data
 void		ft_error(int error_num, char *error_msg);
 void		start(t_data *data);
 void		ft_putnbr(long long int);
-void		get_forks(t_ph *phr);
+int			got_forks(t_ph *phr);
 void		put_forks(t_ph *phr);
 void		eating(t_ph *phr);
 int			destroy_other(t_data *data);
