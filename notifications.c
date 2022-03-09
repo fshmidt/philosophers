@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 21:46:18 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/01 16:02:56 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/09 03:08:35 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,20 @@ static char	*msg(int flag)
 
 void	notification(t_ph *phr, int flag)
 {
-	//usleep(150000);
-	pthread_mutex_lock(&phr->data->stdout);
-	if (phr->data->status == DEAD)
+	pthread_mutex_lock(&phr->data->stdt);
+	ft_putnbr(my_get_time() - phr->start);
+	write(1, " ", 1);
+	if (flag != EATING_COMPLETE)
+		ft_putnbr(phr->num + 1);
+	else
 	{
-		pthread_mutex_lock(&phr->data->death);
-		phr->data->status = STOP;
-	}
-	if (phr->data->status != STOP)
-	{
-		ft_putnbr(my_get_time() - phr->last_meal);
-		write(1, " ", 1);
-		if (flag != EATING_COMPLETE)
-			ft_putnbr(phr->num + 1);
-		//write(1, "/", 1);
 		write(1, msg(flag), ft_strlen(msg(flag)));
+		return ;
 	}
-	pthread_mutex_unlock(&phr->data->stdout);
-	//usleep(150000);
-	//pthread_mutex_unlock(&phr->data->death);
+	write(1, msg(flag), ft_strlen(msg(flag)));
+	//if (flag == EATING && phr->num == 0)
+	//	printf("lm phr = %lld lm data = %lld\n", phr->last_meal, phr->data->last_meal[phr->num]);
+	if (flag != DEAD && flag != EATING_COMPLETE)
+		pthread_mutex_unlock(&phr->data->stdt);
+	//printf("%d %d\n", flag != DEAD, flag != EATING_COMPLETE);
 }

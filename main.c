@@ -6,14 +6,16 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:17:26 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/02 22:32:41 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/06 19:29:09 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-void	ft_error(int error_num, char *error_msg)
+void	ft_error(t_data *data, int error_num, char *error_msg)
 {
 	write(1, error_msg, ft_strlen(error_msg));
+	if (data != NULL)
+		destroy_other(data);
 	exit(error_num);
 }
 
@@ -47,16 +49,14 @@ int	main(int argc, char **argv)
 	t_data	ata;
 
 	if (argc < 5 || argc > 6)
-		ft_error(WRONG_ARG_N, "Wrong arguments number.\n");
+		ft_error(NO_DATA, WRONG_ARG_N, "Wrong arguments number.\n");
 	if (not_validated(argc, argv))
-		ft_error(SHT_ARGS, "Wrong arguments.\n");
+		ft_error(NO_DATA, SHT_ARGS, "Wrong arguments.\n");
 	data = (t_data *)malloc(sizeof(t_data));
 	if (data == NULL)
-		ft_error(NO_MEMORY, "Not enough memory\n");
+		ft_error(NO_DATA, NO_MEMORY, "Not enough memory\n");
 	data = &ata;
 	init_data(argc, argv, data, ft_atoi(argv[1]));
-	printf("4 %lli\n", data->phs[0].data->s_time);
-
 	start(data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 18:16:16 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/02 22:30:45 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/09 03:08:19 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,63 +17,44 @@ static void	init_ms(t_data *data)
 	int	a;
 
 	a = 0;
-	//printf("a = %d\n", a);
-	if (pthread_mutex_init(&data->stdout, NULL) || pthread_mutex_init
-		(&data->death, NULL))
-	{
-		destroy_other(data);
-		ft_error(NO_MEMORY, "Not enough memory\n");
-	}
+	if (pthread_mutex_init(&data->stdt, NULL))
+		ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
 	data->forks = (mutex *)malloc(sizeof(*(data->forks)) * data->num);
 	if (data->forks == NULL)
-	{
-		destroy_other(data);
-		ft_error(NO_MEMORY, "Not enough memory\n");
-	}
-	//printf("gghere\n");
+		ft_error(data, NO_MEMORY, "Not enough memory\n");
 	while (a < data->num)
 	{
-		//printf("a = %d\n", a);
 		if (pthread_mutex_init(&(data->forks[a++]), NULL))
-		{
-			destroy_other(data);
-			ft_error(NO_MEMORY, "Not enough memory\n");
-		}
+			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
 	}
-	//printf("gghere\n");
+	while (a--)
+	{
+		if (pthread_mutex_init(&(data->phs[a].lm_mutex), NULL))
+			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
+	}
 }
 
 static void	init_philo(t_data *data)
 {
 	int	a;
 
-	data->phs = (t_ph *)malloc(sizeof(*(data->phs)) * data->num);
-	if (data->phs == NULL)
-	{
-		destroy_other(data);
-		ft_error(NO_MEMORY, "Not enough memory\n");
-	}
 	a = 0;
-	//printf("here\n");
 	while (a < data->num)
 	{
 		data->phs[a].num = a;
-		//printf("here\n");
-		data->phs[a].status = INIT;
-		//printf("here\n");
-		data->phs[a].last_meal = my_get_time();
-		//printf("here\n");
+		data->phs[a].sum = data->num;
+		data->phs[a].status = ALIVE;
+		data->phs[a].start = 0;
+		data->phs[a].last_meal = 0;
+		data->last_meal[a] = 0;
+		data->phs[a].s_time = data->s_time;
+		data->phs[a].e_time = data->e_time;
+		data->phs[a].d_time = data->d_time;
 		data->phs[a].r_fork = a;
-		//printf("here\n");
 		data->phs[a].l_fork = (a + 1) % data->num;
-		//printf("here\n");
 		data->phs[a].e_num = 0;
-		//printf("here\n");
 		data->phs[a++].data = data;
-		printf("%lli\n", data->phs[a - 1].data->s_time);
-		//pthread_mutex_init(&data->phs[a].stdout, NULL);
 	}
-	//printf("%lli\n", data->phs[1].data->s_time);
 }
 
 void init_data(int argc, char **argv, t_data *data, int num)
@@ -86,14 +67,16 @@ void init_data(int argc, char **argv, t_data *data, int num)
 		data->e_num = ft_atoi(argv[5]);
 	else
 		data->e_num = -1;
+	data->phs = NULL;
+	data->last_meal = NULL;
+	data->forks = NULL;
+	data->phs = (t_ph *)malloc(sizeof(t_ph) * data->num);
+	if (data->phs == NULL)
+		ft_error(data, NO_MEMORY, "Not enough memory\n");
+	data->last_meal = (long long *)malloc(sizeof(long long) * data->num);
+	if (data->last_meal == NULL)
+		ft_error(data, NO_MEMORY, "Not enough memory\n");
 	data->status = INIT;
 	init_philo(data);
-	printf("lol\n");
-	printf("2%lli\n", data->phs[0].data->s_time);
-	/*ft_putnbr(data->phs[1].data->s_time * 1000);
-	printf("lol\n");
-	write(1, "=stime\n",7);*/
 	init_ms(data);
-	printf("3 %lli\n", data->phs[0].data->s_time);
-
 }
