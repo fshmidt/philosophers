@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 21:46:18 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/09 03:08:35 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/08 08:29:04 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	*msg(int flag)
 {
-	char *a;
+	char	*a;
 
 	if (flag == FORK_TAKEN)
 		a = " has taken a fork\n";
@@ -46,9 +46,6 @@ void	notification(t_ph *phr, int flag)
 		return ;
 	}
 	write(1, msg(flag), ft_strlen(msg(flag)));
-	//if (flag == EATING && phr->num == 0)
-	//	printf("lm phr = %lld lm data = %lld\n", phr->last_meal, phr->data->last_meal[phr->num]);
 	if (flag != DEAD && flag != EATING_COMPLETE)
 		pthread_mutex_unlock(&phr->data->stdt);
-	//printf("%d %d\n", flag != DEAD, flag != EATING_COMPLETE);
 }

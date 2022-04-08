@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 18:16:16 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/09 03:08:19 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/07 17:13:57 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	init_ms(t_data *data)
 	a = 0;
 	if (pthread_mutex_init(&data->stdt, NULL))
 		ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
-	data->forks = (mutex *)malloc(sizeof(*(data->forks)) * data->num);
+	data->forks = (t_mutex *)malloc(sizeof(*(data->forks)) * data->num);
 	if (data->forks == NULL)
 		ft_error(data, NO_MEMORY, "Not enough memory\n");
 	while (a < data->num)
@@ -30,6 +30,11 @@ static void	init_ms(t_data *data)
 	while (a--)
 	{
 		if (pthread_mutex_init(&(data->phs[a].lm_mutex), NULL))
+			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
+	}
+	while (a < data->num)
+	{
+		if (pthread_mutex_init(&(data->phs[a++].dth_mutex), NULL))
 			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
 	}
 }
@@ -53,11 +58,12 @@ static void	init_philo(t_data *data)
 		data->phs[a].r_fork = a;
 		data->phs[a].l_fork = (a + 1) % data->num;
 		data->phs[a].e_num = 0;
+		data->phs[a].e_limit = data->e_num;
 		data->phs[a++].data = data;
 	}
 }
 
-void init_data(int argc, char **argv, t_data *data, int num)
+void	init_data(char **argv, t_data *data, int num)
 {
 	data->num = num;
 	data->d_time = ft_atoi(argv[2]);

@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 01:03:06 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/09 03:13:43 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/08 09:16:32 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,14 @@ void	eating(t_ph *phr)
 	pthread_mutex_lock(&phr->lm_mutex);
 	phr->last_meal = my_get_time();
 	phr->data->last_meal[phr->num] = phr->last_meal;
-	phr->e_num += 1;
 	pthread_mutex_unlock(&phr->lm_mutex);
 	notification(phr, EATING);
+	// checking e_num
+	pthread_mutex_lock(&phr->dth_mutex);
+	phr->e_num += 1;
+	if (phr->e_num >= phr->e_limit && phr->e_limit != -1)
+		phr->status = EATING_COMPLETE;
+	pthread_mutex_unlock(&phr->dth_mutex);
 }
 
 void	put_forks(t_ph *phr)
@@ -40,12 +45,10 @@ int	got_forks(t_ph *phr)
 {
 	if (phr->sum == 1)
 	{
-		//printf("p\n");
 		pthread_mutex_lock(&phr->data->forks[phr->r_fork]);
-		//printf("ph\n");
 		notification(phr, FORK_TAKEN);
-		pthread_mutex_lock(&phr->lm_mutex);
-		return (0);
+		pthread_mutex_lock(&phr->dth_mutex);
+		return (ONE_FORK);
 	}
 	if (phr->num + 1 != phr->sum)
 	{
@@ -61,6 +64,6 @@ int	got_forks(t_ph *phr)
 		pthread_mutex_lock(&phr->data->forks[phr->r_fork]);
 		notification(phr, FORK_TAKEN);
 	}
-	pthread_mutex_lock(&phr->lm_mutex);
-	return (1);
+	pthread_mutex_lock(&phr->dth_mutex);
+	return (BOTH_FORKS);
 }

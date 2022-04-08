@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 19:09:48 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/06 19:17:24 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/03/09 19:52:39 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,6 @@ long long	ft_atoi(const char *str)
 	}
 	while ((str[i] >= 48) && (str[i] <= 57))
 		tni = (tni * 10) + str[i++] - 48;
-	/*/if (tni > 2147483647 && minus > 0)
-		return (-1);
-	else if (tni > 2147483648 && minus < 0)
-		return (0);*/
 	return (tni * minus);
 }
 
