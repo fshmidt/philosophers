@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:17:26 by mbesan            #+#    #+#             */
-/*   Updated: 2022/03/11 03:03:48 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/11 18:15:52 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ int	main(int argc, char **argv)
 		ft_error(NO_DATA, NO_MEMORY, "Not enough memory\n");
 	init_data(argv, data, ft_atoi(argv[1]));
 	start(data);
-	//free(data);
+	destroy_other(data);
 	return (0);
 }

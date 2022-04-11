@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 21:46:18 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/08 08:29:04 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:36:03 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,6 @@ void	notification(t_ph *phr, int flag)
 	write(1, " ", 1);
 	if (flag != EATING_COMPLETE)
 		ft_putnbr(phr->num + 1);
-	else
-	{
-		write(1, msg(flag), ft_strlen(msg(flag)));
-		return ;
-	}
 	write(1, msg(flag), ft_strlen(msg(flag)));
 	if (flag != DEAD && flag != EATING_COMPLETE)
 		pthread_mutex_unlock(&phr->data->stdt);

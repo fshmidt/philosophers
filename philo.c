@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 01:03:06 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/08 09:16:32 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:35:48 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	eating(t_ph *phr)
 	phr->data->last_meal[phr->num] = phr->last_meal;
 	pthread_mutex_unlock(&phr->lm_mutex);
 	notification(phr, EATING);
-	// checking e_num
 	pthread_mutex_lock(&phr->dth_mutex);
 	phr->e_num += 1;
 	if (phr->e_num >= phr->e_limit && phr->e_limit != -1)

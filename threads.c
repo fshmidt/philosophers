@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 19:43:34 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/08 09:16:18 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/11 11:57:24 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,12 @@ static int	nomnom(t_data *data, int num)
 		pthread_mutex_unlock(&data->phs[a++].dth_mutex);
 	}
 	if (a == data->num)
+	{
 		notification(&data->phs[num], EATING_COMPLETE);
-	return (1);
+		//printf("nn\n");
+		return (1);
+	}
+	return (0);
 }
 
 static int	death_cascade(t_data *data, int num)
@@ -50,6 +54,7 @@ static int	death_cascade(t_data *data, int num)
 				pthread_mutex_lock(&data->phs[a].dth_mutex);
 			a++;
 		}
+		//printf("dc\n");
 		return (1);
 	}
 	pthread_mutex_unlock(&data->phs[num].lm_mutex);
@@ -69,13 +74,13 @@ static void	*checker(void *data)
 		{
 			if (death_cascade(tata, a) || nomnom(tata, a))
 			{
-				put_forks(&tata->phs[a]);
-				my_usleep(100);
+				//pthread_mutex_unlock(&tata->stop);
+				//printf("NOOO\n");
 				return ((void *)0);
 			}
 			a++;
 		}
-		my_usleep(1000);
+		my_usleep(5);
 	}
 	return ((void *)0);
 }
@@ -86,24 +91,22 @@ static void	*philo(void *phil)
 
 	phr = phil;
 	if (phr->num % 2 == 0 && phr->data->status == INIT && phr->sum > 1)
-		my_usleep(1500);
+		my_usleep(1);
 	while (1)
 	{
 		if (got_forks(phr) && phr->status != EATING_COMPLETE)
 		{
 			pthread_mutex_unlock(&phr->dth_mutex);
 			eating(phr);
-			my_usleep((phr->e_time) * 1000);
+			my_usleep((phr->e_time));
 			put_forks(phr);
 			notification(phr, SLEEPING);
-			my_usleep(phr->s_time * 1000);
+			my_usleep(phr->s_time);
 			notification(phr, THINKING);
-			my_usleep(800);
 		}
 		else
 		{
 			pthread_mutex_unlock(&phr->dth_mutex);
-			//my_usleep((phr->d_time + 20) * 1000);
 			return ((void *)0);
 		}
 	}
@@ -126,9 +129,9 @@ void	start(t_data *data)
 	while (a--)
 		pthread_create(&data->phs[a].thr, NULL, &philo, (void *)
 			&data->phs[a]);
-	pthread_create(&monitor, NULL, &checker, (void *)data);
-	pthread_detach(monitor);
 	num = data->num;
 	while (a < num)
-		pthread_join(data->phs[a++].thr, NULL);
+		pthread_detach(data->phs[a++].thr);
+	pthread_create(&monitor, NULL, &checker, (void *)data);
+	pthread_join(monitor, NULL);
 }
