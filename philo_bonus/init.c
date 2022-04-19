@@ -6,37 +6,56 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 18:16:16 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/07 17:13:57 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/19 10:59:00 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	init_ms(t_data *data)
+static void	sem_name(char *name, int flag, int num)
+{
+	if (flag == LAST_MEAL)
+		name[0] = 'l';
+	else if (flag == DEATH)
+		name[0] = 'd';
+	else
+		name[0] = 'n';
+	name[1] = num / 100 + '0';
+	name[2] = num / 10 % 10 + '0';
+	name[3] = num % 10 + '0';
+	name[4] = '\0';
+}
+
+static sem_t	*my_sem_open(int flag, int num, int counter)
+{
+	sem_t	*semaphore;
+	char	name[5];
+
+	sem_name((char *)name, flag, num);
+	semaphore = sem_open((const char *)name, O_CREAT, S_IRWXU, counter);
+	sem_unlink(name);
+	return (semaphore);
+}
+
+static void	init_sem(t_data *data)
 {
 	int	a;
 
-	a = 0;
-	if (pthread_mutex_init(&data->stdt, NULL))
-		ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
-	data->forks = (t_mutex *)malloc(sizeof(*(data->forks)) * data->num);
-	if (data->forks == NULL)
-		ft_error(data, NO_MEMORY, "Not enough memory\n");
-	while (a < data->num)
-	{
-		if (pthread_mutex_init(&(data->forks[a++]), NULL))
-			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
-	}
+	data->stdt = sem_open("/stdt", O_CREAT, S_IRWXU, 1);
+	sem_unlink("/stdt");
+	data->forks = sem_open("/forks", O_CREAT, S_IRWXU, data->num);
+	sem_unlink("/forks");
+	data->death = sem_open("/death", O_CREAT, S_IRWXU, 0);
+	sem_unlink("/death");
+	a = data->num;
 	while (a--)
-	{
-		if (pthread_mutex_init(&(data->phs[a].lm_mutex), NULL))
-			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
-	}
-	while (a < data->num)
-	{
-		if (pthread_mutex_init(&(data->phs[a++].dth_mutex), NULL))
-			ft_error(data, MUTEX_INIT_ERR, "Mutex init error\n");
-	}
+		data->phs[a].lm_sem = my_sem_open(LAST_MEAL, a, 1);
+	a = data->num;
+	while (a--)
+		data->phs[a].dth_sem = my_sem_open(DEATH, a, 1);
+	a = data->num;
+	while (a--)
+		data->nomnom[a] = my_sem_open(NOMNOM, a, 0);
 }
 
 static void	init_philo(t_data *data)
@@ -51,12 +70,9 @@ static void	init_philo(t_data *data)
 		data->phs[a].status = ALIVE;
 		data->phs[a].start = 0;
 		data->phs[a].last_meal = 0;
-		data->last_meal[a] = 0;
 		data->phs[a].s_time = data->s_time;
 		data->phs[a].e_time = data->e_time;
 		data->phs[a].d_time = data->d_time;
-		data->phs[a].r_fork = a;
-		data->phs[a].l_fork = (a + 1) % data->num;
 		data->phs[a].e_num = 0;
 		data->phs[a].e_limit = data->e_num;
 		data->phs[a++].data = data;
@@ -74,15 +90,15 @@ void	init_data(char **argv, t_data *data, int num)
 	else
 		data->e_num = -1;
 	data->phs = NULL;
-	data->last_meal = NULL;
+	data->nomnom = NULL;
 	data->forks = NULL;
 	data->phs = (t_ph *)malloc(sizeof(t_ph) * data->num);
 	if (data->phs == NULL)
 		ft_error(data, NO_MEMORY, "Not enough memory\n");
-	data->last_meal = (long long *)malloc(sizeof(long long) * data->num);
-	if (data->last_meal == NULL)
+	data->nomnom = (sem_t **)malloc(sizeof(sem_t *) * data->num);
+	if (data->nomnom == NULL)
 		ft_error(data, NO_MEMORY, "Not enough memory\n");
 	data->status = INIT;
 	init_philo(data);
-	init_ms(data);
+	init_sem(data);
 }

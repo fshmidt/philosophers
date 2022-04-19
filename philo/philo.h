@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:20:54 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/11 18:15:02 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/16 20:30:06 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <string.h>
 # include <sys/time.h>
 # include <pthread.h>
-//# include <limits.h>
 
 # define NO_DATA NULL
 
@@ -56,8 +55,8 @@ struct					s_data;
 typedef struct s_ph
 {
 	int				num;
-	long long		l_fork;
-	long long		r_fork;
+	int				l_fork;
+	int				r_fork;
 	int				status;
 	long long		e_time;
 	long long		d_time;

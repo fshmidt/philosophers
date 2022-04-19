@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 01:03:06 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/10 18:35:48 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/19 10:55:07 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,5 @@ int	got_forks(t_ph *phr)
 		pthread_mutex_lock(&phr->data->forks[phr->r_fork]);
 		notification(phr, FORK_TAKEN);
 	}
-	pthread_mutex_lock(&phr->dth_mutex);
 	return (BOTH_FORKS);
 }
