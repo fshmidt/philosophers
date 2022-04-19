@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 20:20:54 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/19 10:52:38 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/19 20:55:10 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@
 # include <semaphore.h>
 # include <sys/types.h>
 # include <signal.h>
-# include <stdio.h>
 
 # define NO_DATA NULL
-# define L_M "/lm"
-# define DTH "/dt"
 
 enum	e_ex
 {

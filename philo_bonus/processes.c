@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 01:03:06 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/19 10:58:06 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/19 20:57:20 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static int	got_forks(t_ph *phr)
 	{
 		sem_wait(phr->data->forks);
 		notification(phr, FORK_TAKEN);
-		sem_wait(phr->dth_sem);
 		return (ONE_FORK);
 	}
 	sem_wait(phr->data->forks);
@@ -50,7 +49,7 @@ static int	got_forks(t_ph *phr)
 static void	*philo(t_ph	*phr)
 {
 	monitor(phr);
-	if (phr->num % 2 == 0 && phr->data->status == INIT && phr->sum > 1)
+	if (phr->num % 2 == 0 && phr->sum > 1)
 		my_usleep(1);
 	while (1)
 	{
@@ -64,7 +63,11 @@ static void	*philo(t_ph	*phr)
 			notification(phr, THINKING);
 		}
 		else
+		{
+			sem_wait(phr->data->death);
+			sem_post(phr->data->death);
 			return ((void *)0);
+		}
 	}
 }
 

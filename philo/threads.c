@@ -6,7 +6,7 @@
 /*   By: mbesan <mbesan@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 19:43:34 by mbesan            #+#    #+#             */
-/*   Updated: 2022/04/17 14:22:27 by mbesan           ###   ########.fr       */
+/*   Updated: 2022/04/19 14:11:14 by mbesan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static void	*checker(void *data)
 				return ((void *)0);
 			a++;
 		}
-		my_usleep(5);
+		my_usleep(1);
 	}
 }
 
